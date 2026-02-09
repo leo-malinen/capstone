@@ -14,22 +14,13 @@ class SimulationManager:
         }
 
     def register_spawner(self, spawner_func):
-        """
-        Registers the vehicle spawning process.
-        """
         self.env.process(spawner_func(self.env, self.network))
 
     def register_traffic_lights(self, traffic_lights):
-        """
-        Registers all traffic light agents.
-        """
         for tl in traffic_lights:
             pass 
 
     def start(self):
-        """
-        Kicks off the simulation loop.
-        """
         print(f"--- Simulation Started (Duration: {self.config.SIMULATION_TIME}) ---")
                 self.event_handler.start_random_events()
 
