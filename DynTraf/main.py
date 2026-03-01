@@ -9,50 +9,41 @@ from algorithms.optimizer import SignalOptimizer
 from simulation.env_manager import SimulationManager
 import config
 
-from ui.window import MainWindow
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
 
 def vehicle_spawner(env, network):
     vehicle_count = 0
-    nodes = list(network.nodes()) 
+    nodes = list(network.nodes())
+    
     while True:
-        yield env.timeout(random.randint(5, 15))       
+        yield env.timeout(random.randint(3, 8)) 
         vehicle_count += 1
         
-        start_node = random.choice(nodes) # Random start and ends
-        end_node = random.choice(nodes)
-        
-        if start_node != end_node:
-            try:
-                if nx.has_path(network, start_node, end_node):
-                    path = nx.shortest_path(network, start_node, end_node, weight='length')                    
-                    Vehicle(env, vehicle_count, network, path) # Vehicle spawn
-                else:
-                    print(f"Skipping spawn: No path possible from {start_node} to {end_node}")
-                    
-            except nx.NetworkXNoPath:
-                pass
+        if nodes:
+            start_node = random.choice(nodes)
+            end_node = random.choice(nodes)
+
+            if start_node != end_node:
+                try:
+                    if nx.has_path(network, start_node, end_node):
+                        path = nx.shortest_path(network, start_node, end_node, weight='length')
+                        Vehicle(env, vehicle_count, network, path)
+                except nx.NetworkXNoPath:
+                    pass
 
 def main():
+    print(f"Starting DynTraf from: {current_dir}")
     app = QApplication(sys.argv)
 
-    print("Building Grid")
+    print("Initializing Framework")
     net_builder = TrafficNetwork()
-    graph = net_builder.build_grid_network(rows=5, cols=5)
 
-    print("Initializing Environment")
-    sim_manager = SimulationManager(graph, config)
-
-    optimizer = SignalOptimizer(graph)
-
-    print("Deploying Traffic Lights")
-    for node in graph.nodes():
-        TrafficLight(sim_manager.env, node, optimizer)
-
-    sim_manager.register_spawner(vehicle_spawner)
-
-    # Launch the Visualization (View)
-    window = MainWindow(sim_manager)
+    print("Launching Interface")
+    window = MainWindow(net_builder, vehicle_spawner, SignalOptimizer)
     window.show()
+
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
