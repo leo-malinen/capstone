@@ -1,3 +1,4 @@
+import os
 import sys
 import random
 import networkx as nx
@@ -48,3 +49,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
