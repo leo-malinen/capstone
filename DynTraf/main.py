@@ -1,18 +1,18 @@
-import os
 import sys
+import os
 import random
 import networkx as nx
-from PyQt5.QtWidgets import QApplication
-from models.network_builder import TrafficNetwork
-from models.traffic_light import TrafficLight
-from models.vehicle import Vehicle
-from algorithms.optimizer import SignalOptimizer
-from simulation.env_manager import SimulationManager
-import config
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
+
+from PyQt5.QtWidgets import QApplication
+from models.network_builder import TrafficNetwork
+from models.vehicle import Vehicle
+from algorithms.optimizer import SignalOptimizer
+
+from ui.window import MainWindow
 
 def vehicle_spawner(env, network):
     vehicle_count = 0
@@ -38,10 +38,10 @@ def main():
     print(f"Starting DynTraf from: {current_dir}")
     app = QApplication(sys.argv)
 
-    print("Initializing Framework")
+    print(" Initializing Framework ")
     net_builder = TrafficNetwork()
 
-    print("Launching Interface")
+    print(" Launching Interface ")
     window = MainWindow(net_builder, vehicle_spawner, SignalOptimizer)
     window.show()
 
@@ -49,4 +49,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
