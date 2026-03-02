@@ -13,11 +13,11 @@ class MainWindow(QMainWindow):
         self.optimizer_class = optimizer_class
         
         self.current_time = 0
-        self.grid_style = 'Straight' # Default
+        self.grid_style = 'Straight'
         
         self.init_ui()
         self.setup_timer()
-        self.reset_simulation() # Build the initial state
+        self.reset_simulation()
 
     def init_ui(self):
         self.setWindowTitle("DynTraf - Grid Selection")
@@ -25,8 +25,7 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout(central_widget)
-        left_panel = QVBoxLayout()
-        
+        left_panel = QVBoxLayout()     
         grid_group = QGroupBox("Map Settings")
         grid_layout = QVBoxLayout()
         self.combo = QComboBox()
@@ -35,7 +34,6 @@ class MainWindow(QMainWindow):
         grid_layout.addWidget(self.combo)
         grid_group.setLayout(grid_layout)
         left_panel.addWidget(grid_group)
-
         control_group = QGroupBox("Controls")
         control_layout = QVBoxLayout()
         self.btn_start = QPushButton("Start / Resume")
@@ -46,7 +44,6 @@ class MainWindow(QMainWindow):
         control_layout.addWidget(self.btn_stop)
         control_group.setLayout(control_layout)
         left_panel.addWidget(control_group)
-
         stats_group = QGroupBox("Live Statistics")
         stats_layout = QVBoxLayout()
         self.lbl_time = QLabel("Time: 0")
@@ -88,7 +85,7 @@ class MainWindow(QMainWindow):
         for node in self.graph.nodes():
             TrafficLight(self.sim_manager.env, node, optimizer)
             
-        self.sim_manager.register_spawner(self.spawner_func)    
+        self.sim_manager.register_spawner(self.spawner_func)        
         self.canvas.draw_network(self.graph, self.current_time, self.grid_style)
 
     def setup_timer(self):
